@@ -7,6 +7,9 @@
     <Filter Include="world">
       <UniqueIdentifier>{ad942ca7-8127-44b0-a55e-4da81ef90936}</UniqueIdentifier>
     </Filter>
+    <Filter Include="random shit">
+      <UniqueIdentifier>{ccb59e77-7cb5-4bae-9e0f-4fe8a553cc87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\main.cpp">
@@ -23,5 +26,16 @@
     <ClInclude Include="src\world\FastNoiseLite.h">
       <Filter>world</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitattributes">
+      <Filter>random shit</Filter>
+    </None>
+    <None Include="..\.gitignore">
+      <Filter>random shit</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>random shit</Filter>
+    </None>
   </ItemGroup>
 </Project>
