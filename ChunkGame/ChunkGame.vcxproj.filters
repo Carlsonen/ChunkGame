@@ -18,7 +18,7 @@
     <ClCompile Include="src\main\main.cpp">
       <Filter>src\main</Filter>
     </ClCompile>
-    <ClCompile Include="src\world\world.cpp">
+    <ClCompile Include="src\world\World.cpp">
       <Filter>src\world</Filter>
     </ClCompile>
     <ClCompile Include="src\main\Drawer.cpp">

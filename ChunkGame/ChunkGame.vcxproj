@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClCompile Include="src\main\Drawer.cpp" />
     <ClCompile Include="src\main\main.cpp" />
-    <ClCompile Include="src\world\world.cpp" />
+    <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\Drawer.h" />
