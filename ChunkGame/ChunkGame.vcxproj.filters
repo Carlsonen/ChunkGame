@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="main">
+      <UniqueIdentifier>{5ad81f91-ad01-4029-ba3c-a8284e7f5a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="world">
+      <UniqueIdentifier>{ad942ca7-8127-44b0-a55e-4da81ef90936}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main\main.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\world.cpp">
+      <Filter>world</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\main\olcPixelGameEngine.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\FastNoiseLite.h">
+      <Filter>world</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
