@@ -140,12 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\main\Drawer.cpp" />
     <ClCompile Include="src\main\main.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\main\Drawer.h" />
     <ClInclude Include="src\main\olcPixelGameEngine.h" />
     <ClInclude Include="src\world\FastNoiseLite.h" />
+    <ClInclude Include="src\world\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitattributes" />
