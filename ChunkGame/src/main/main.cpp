@@ -15,7 +15,9 @@
 #include <cstring>
 #include <cstddef>
 
-using namespace std;
+#include "world/World.h"
+
+
 
 //screen setup
 const int w = 960;
@@ -38,12 +40,15 @@ public:
 public:
 	bool OnUserCreate() override
 	{
+		Chunk chunkus;
+		chunkus.load({ 0,0 }, "testworld1");
+		chunkus.save("testworld1");
 		return true;
 	}
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		Drawer();
+		//Drawer();
 
 		return true;
 	}
