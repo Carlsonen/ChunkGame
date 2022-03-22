@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\ocarl\source\repos\ChunkGame\ChunkGame\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,11 +143,13 @@
   <ItemGroup>
     <ClCompile Include="src\main\Drawer.cpp" />
     <ClCompile Include="src\main\main.cpp" />
+    <ClCompile Include="src\shit\shit.cpp" />
     <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\main\Drawer.h" />
     <ClInclude Include="src\main\olcPixelGameEngine.h" />
+    <ClInclude Include="src\shit\shit.h" />
     <ClInclude Include="src\world\FastNoiseLite.h" />
     <ClInclude Include="src\world\World.h" />
   </ItemGroup>

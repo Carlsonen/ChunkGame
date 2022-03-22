@@ -13,6 +13,9 @@
     <Filter Include="src\world">
       <UniqueIdentifier>{ad942ca7-8127-44b0-a55e-4da81ef90936}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\shit">
+      <UniqueIdentifier>{95c94067-efbc-4023-93dd-a1cb1a26dcbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\main.cpp">
@@ -23,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="src\main\Drawer.cpp">
       <Filter>src\main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shit\shit.cpp">
+      <Filter>src\shit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="src\world\World.h">
       <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shit\shit.h">
+      <Filter>src\shit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

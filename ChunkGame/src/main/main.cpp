@@ -16,7 +16,7 @@
 #include <cstddef>
 
 #include "world/World.h"
-
+#include "shit/shit.h"
 
 
 //screen setup
@@ -32,17 +32,18 @@ public:
 	
 	void Drawer() {
 		Clear(olc::Pixel::Pixel());
-
-		
-
 	}
 	
 public:
 	bool OnUserCreate() override
 	{
-		Chunk chunkus;
-		chunkus.load({ 0,0 }, "testworld1");
-		chunkus.save("testworld1");
+		World world;
+		world.create("cock", 0xf0f0f0f0f0f0f0f0);
+		world.load_chunk({ 0,0 });
+		world.save();
+		std::cout << "seed nuts " << world.seed << "\n";
+		world.load("cock");
+		std::cout << "seed nuts " << world.seed << "\n";
 		return true;
 	}
 
