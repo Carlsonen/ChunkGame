@@ -36,21 +36,34 @@ public:
 	
 public:
 	World world;
+	olc::vi2d test_pos = {0,0};
 	bool OnUserCreate() override
 	{
 		//world.create("cock", 0);
-		world.load("cock");
+		world.create("cock",0);
+		//world.load_chunk({ 0,0 });
 		
+
 		return true;
 	}
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
 		//Drawer();
-		world.load_chunk({ 0,0 });
+		world.update_chunks(test_pos);
 		
-		delete world.loaded_chunks[0];
-		world.loaded_chunks.erase(world.loaded_chunks.begin() + 0);
+		if (GetKey(olc::Key::UP).bHeld) {
+			test_pos += olc::vi2d{0, -1};
+		}
+		if (GetKey(olc::Key::DOWN).bHeld) {
+			test_pos += olc::vi2d{ 0, 1 };
+		}
+		if (GetKey(olc::Key::LEFT).bHeld) {
+			test_pos += olc::vi2d{ -1, 0 };
+		}
+		if (GetKey(olc::Key::RIGHT).bHeld) {
+			test_pos += olc::vi2d{ 1, 0 };
+		}
 		return true;
 	}
 };

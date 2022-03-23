@@ -9,10 +9,10 @@ void Chunk::generate(olc::vi2d pos, uint64_t seed) {
 		tiledata[i] = (seed + i) % 3;
 	}
 	
-	std::cout << "generation complete\n";
+	
 }
 Chunk::Chunk(olc::vi2d pos, std::string world_name, uint64_t seed) {
-	std::string filepath = "./worlds/" + world_name + "/" + pos.str() + ".chonk";
+	std::string filepath = "./worlds/" + world_name + "/chunks/" + pos.str() + ".chonk";
 
 	if (shit::file_exists_test(filepath)) {
 		// - (1) read tiledata
@@ -27,10 +27,11 @@ Chunk::Chunk(olc::vi2d pos, std::string world_name, uint64_t seed) {
 		position = pos;
 
 		infile.close();
-		std::cout << "load complete\n";
+		std::cout << "loaded " << filepath <<  std::endl;
 	}
 	else {
 		generate(pos, seed);
+		std::cout << "generated " << filepath <<  std::endl;
 	}
 }
 Chunk::~Chunk() {
@@ -41,14 +42,28 @@ void Chunk::save(std::string world_name) {
 
 	// create file
 	std::string filepath = "./worlds/" + world_name
-		+ "/" + position.str() + ".chonk";
+		+ "/chunks/" + position.str() + ".chonk";
 	std::fstream outfile(filepath, std::ios::binary | std::ios::out);
 
 	// (1)
 	// write tiledata to file
 	outfile.write((char*)tiledata, size * size * sizeof(uint8_t));
-
+	std::cout << "saved " << filepath << std::endl;
 	outfile.close();
+}
+int Chunk::dist_from_point_max(olc::vi2d point) {
+	olc::vi2d radius = { size / 2,size / 2 };
+	olc::vi2d center = position * size + radius;
+
+	olc::vi2d d = center - point;
+	d.x = abs(d.x);
+	d.y = abs(d.y);
+	d -= radius;
+	d = d.max({ 0,0 });
+	return std::max(d.x, d.y);
+}
+olc::vi2d Chunk::get_id() {
+	return position;
 }
 
 
@@ -60,6 +75,8 @@ void World::create(std::string world_name, uint64_t _seed) {
 	std::string filepath = "./worlds";
 	shit::createfolder(filepath);
 	filepath += "/" + world_name;
+	shit::createfolder(filepath);
+	filepath += "/chunks";
 	shit::createfolder(filepath);
 
 	// (2)
@@ -110,7 +127,48 @@ void World::save() {
 void World::load_chunk(olc::vi2d pos) {
 	loaded_chunks.push_back(new Chunk(pos,name,seed));
 }
+bool World::is_chunk_loaded(olc::vi2d id) {
+	for (int i = 0; i < loaded_chunks.size(); i++) {
+		if (loaded_chunks[i]->get_id() == id) {
+			return true;
+		}
+	}
+	return false;
+}
+void World::update_chunks(olc::vi2d player_pos) {
+	for (int i = 0; i < loaded_chunks.size(); i++) {
+		Chunk* chunk = loaded_chunks[i];
+		if (chunk->dist_from_point_max(player_pos) > 100) {
+			chunk->save(name);
+			delete chunk;
+			loaded_chunks.erase(loaded_chunks.begin() + i);
+			return;
+		}
+	}
+	olc::vi2d id = shit::to_chunk(player_pos + olc::vi2d{ -64, -64 }, 256);
+	if (!is_chunk_loaded(id)) {
+		load_chunk(id);
+		return;
+	}
+	id = shit::to_chunk(player_pos + olc::vi2d{ 64, -64 }, 256);
+	if (!is_chunk_loaded(id)) {
+		load_chunk(id);
+		return;
+	}
+	id = shit::to_chunk(player_pos + olc::vi2d{ -64, 64 }, 256);
+	if (!is_chunk_loaded(id)) {
+		load_chunk(id);
+		return;
+	}
+	id = shit::to_chunk(player_pos + olc::vi2d{ 64, 64 }, 256);
+	if (!is_chunk_loaded(id)) {
+		load_chunk(id);
+		return;
+	}
+}
 
-
+olc::vi2d shit::to_chunk(olc::vf2d pos, int32_t chunk_size) {
+	return (pos / chunk_size).floor();
+}
 
 

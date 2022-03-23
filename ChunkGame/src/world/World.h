@@ -15,6 +15,8 @@ public:
 	~Chunk();
 	// save
 	void save(std::string world_name);
+	int dist_from_point_max(olc::vi2d point);
+	olc::vi2d get_id();
 private:
 	void generate(olc::vi2d pos, uint64_t seed);
 	const int size = 256;
@@ -28,6 +30,8 @@ public:
 	void load(std::string world_name);
 	void save();
 	void load_chunk(olc::vi2d pos);
+	bool is_chunk_loaded(olc::vi2d id);
+	void update_chunks(olc::vi2d player_pos);
 public:
 	std::string name;
 	uint64_t seed;
