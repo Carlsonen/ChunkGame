@@ -35,22 +35,22 @@ public:
 	}
 	
 public:
+	World world;
 	bool OnUserCreate() override
 	{
-		World world;
-		world.create("cock", 0xf0f0f0f0f0f0f0f0);
-		world.load_chunk({ 0,0 });
-		world.save();
-		std::cout << "seed nuts " << world.seed << "\n";
+		//world.create("cock", 0);
 		world.load("cock");
-		std::cout << "seed nuts " << world.seed << "\n";
+		
 		return true;
 	}
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
 		//Drawer();
-
+		world.load_chunk({ 0,0 });
+		
+		delete world.loaded_chunks[0];
+		world.loaded_chunks.erase(world.loaded_chunks.begin() + 0);
 		return true;
 	}
 };

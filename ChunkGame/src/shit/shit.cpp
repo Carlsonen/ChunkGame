@@ -10,8 +10,9 @@ std::string shit::load_string(std::fstream& file) {
 	uint64_t size;
 	file.read((char*)(&size), sizeof(uint64_t));
 
-	char* in_str = new char[size];
+	char* in_str = new char[size+1];
 	file.read(in_str, size);
+	in_str[size] = '\0';
 	std::string s(in_str);
 	return s;
 }

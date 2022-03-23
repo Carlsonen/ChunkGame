@@ -68,7 +68,7 @@ void World::create(std::string world_name, uint64_t _seed) {
 	world_tick = 0;
 }
 void World::load(std::string world_name) {
-	std::string filepath = "./worlds/" + name + "/meta.data";
+	std::string filepath = "./worlds/" + world_name + "/meta.data";
 	if (shit::file_exists_test(filepath)) {
 		// create file
 		std::fstream metadata(filepath, std::ios::binary | std::ios::in);
