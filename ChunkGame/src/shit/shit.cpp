@@ -39,7 +39,12 @@ bool shit::file_exists_test(const std::string name) {
 olc::vi2d shit::to_chunk(olc::vf2d pos, int32_t chunk_size) {
 	return (pos / chunk_size).floor();
 }
-olc::vi2d shit::vClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax) {
+olc::vi2d shit::viClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax) {
+	value.x = std::max(std::min(value.x, vMax.x), vMin.x);
+	value.y = std::max(std::min(value.y, vMax.y), vMin.y);
+	return value;
+}
+olc::vf2d shit::vfClamp(olc::vf2d value, olc::vf2d vMin, olc::vf2d vMax) {
 	value.x = std::max(std::min(value.x, vMax.x), vMin.x);
 	value.y = std::max(std::min(value.y, vMax.y), vMin.y);
 	return value;

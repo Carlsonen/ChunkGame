@@ -36,16 +36,19 @@ public:
 	MainGameObject() { sAppName = "The name of the app"; }
 
 	void Draw_partial_chunk(olc::vf2d upper_left, olc::vf2d bottom_right, Chunk* chunk) {
+		
 		olc::vi2d chunk_ul = chunk->get_id() * 256;
 		olc::vi2d chunk_br = chunk_ul + olc::vi2d{ 256,256 };
 
-		olc::vi2d start = shit::vClamp(upper_left.floor(), chunk_ul, chunk_br);
-		olc::vi2d end = shit::vClamp(bottom_right.ceil(), chunk_ul, chunk_br);
+		olc::vi2d start = shit::viClamp((upper_left / camera.downscaler).floor() * camera.downscaler, chunk_ul, chunk_br);
+		olc::vi2d end = shit::viClamp((bottom_right / camera.downscaler).ceil() * camera.downscaler, chunk_ul, chunk_br) ;
 		//std::cout << start << " - " << end << std::endl;
-		for (int y = start.y; y < end.y; y++) {
-			for (int x = start.x; x < end.x; x++) {
-				olc::vf2d screen_pos = camera.world_to_screen(olc::vf2d{ (float)x,(float)y }) 
-					* olc::vi2d{ w, h };
+		for (int y = start.y; y < end.y; y += camera.downscaler) {
+			for (int x = start.x; x < end.x; x += camera.downscaler) {
+				olc::vf2d screen_pos = (
+					camera.world_to_screen(olc::vf2d{ (float)x,(float)y }) 
+					* olc::vi2d{ w, h }
+				).ceil();
 				int chunk_x = x - chunk_ul.x;
 				int chunk_y = y - chunk_ul.y;
 				uint8_t tile = chunk->get_tile(chunk_x, chunk_y);
@@ -53,7 +56,8 @@ public:
 				if (tile == 1) color = olc::RED;
 				else if (tile == 2) color = olc::BLUE;
 				//DrawRect(screen_pos, olc::vi2d{10,10}, color);
-				DrawPartialDecal(screen_pos, olc::vf2d{ 16.0,16.0 },
+				olc::vf2d decal_scale = (olc::vf2d{ (float)w,(float)h } / camera.view_dimensions * camera.downscaler).ceil();
+				DrawPartialDecal(screen_pos, decal_scale,
 					decTiles.get(), olc::vf2d{(float)tile * 16, 0}, olc::vf2d{16.0,16.0});
 			}
 		}
@@ -87,18 +91,27 @@ public:
 		Drawer();
 		world.update_chunks(camera.position);
 
-		float speed = 256;
+		float speed = 50;
 		if (GetKey(olc::Key::UP).bHeld) {
-			camera.move_position(olc::vf2d{ 0, -1 } *fElapsedTime * speed);
+			camera.move_position(olc::vf2d{ 0, -1 } * fElapsedTime * speed);
 		}
 		if (GetKey(olc::Key::DOWN).bHeld) {
-			camera.move_position(olc::vf2d{ 0, 1 } *fElapsedTime * speed);
+			camera.move_position(olc::vf2d{ 0, 1 } * fElapsedTime * speed);
 		}
 		if (GetKey(olc::Key::LEFT).bHeld) {
-			camera.move_position(olc::vf2d{ -1, 0 } *fElapsedTime * speed);
+			camera.move_position(olc::vf2d{ -1, 0 } * fElapsedTime * speed);
 		}
 		if (GetKey(olc::Key::RIGHT).bHeld) {
-			camera.move_position(olc::vf2d{ 1, 0 } *fElapsedTime * speed);
+			camera.move_position(olc::vf2d{ 1, 0 } * fElapsedTime * speed);
+		}
+
+		if (GetMouseWheel() < 0) {
+			camera.zoom(1.1);
+			//downscaler = downscaler * 2;
+		}
+		if (GetMouseWheel() > 0) {
+			camera.zoom(1/1.1);
+			//downscaler = std::max(downscaler * 0.5, 1.0);
 		}
 		return true;
 	}

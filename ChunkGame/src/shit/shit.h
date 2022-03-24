@@ -13,6 +13,7 @@ namespace shit {
 	bool file_exists_test(const std::string name);
 	// math shit
 	olc::vi2d to_chunk(olc::vf2d pos, int32_t chunk_size);
-	olc::vi2d vClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax);
+	olc::vi2d viClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax);
+	olc::vf2d vfClamp(olc::vf2d value, olc::vf2d vMin, olc::vf2d vMax);
 }
  

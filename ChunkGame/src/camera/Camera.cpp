@@ -2,7 +2,8 @@
 
 Camera::Camera() {
 	position = olc::vf2d{ 0,0 };
-	view_dimensions = olc::vf2d{ 64,64 };
+	view_dimensions = olc::vf2d{ 16,16 };
+	downscaler = 1;
 }
 void Camera::set_position(olc::vf2d pos) {
 	position = pos;
@@ -12,6 +13,19 @@ void Camera::move_position(olc::vf2d movement) {
 }
 void Camera::set_view(olc::vf2d dims) {
 	view_dimensions = dims;
+	
+}
+void Camera::zoom(float z) {
+	view_dimensions = shit::vfClamp(
+		view_dimensions*z,
+		olc::vf2d{4.0,4.0},
+		olc::vf2d{1024.0,1024.0});
+	float x = view_dimensions.x;
+	if (x < 64) downscaler = 1;
+	else if (x < 255) downscaler = 2;
+	else if (x < 1024) downscaler = 4;
+	else downscaler = 8;
+	std::cout << "downscaler: " << downscaler << std::endl;
 }
 olc::vf2d Camera::UL_world() {
 	return position - view_dimensions / 2;

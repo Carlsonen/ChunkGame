@@ -12,8 +12,8 @@ void Chunk::generate(olc::vi2d pos, uint64_t seed) {
 	for (int y = 0; y < size; y++) {
 		for (int x = 0; x < size; x++) {
 			olc::vi2d world_coordinate = position * size + olc::vi2d{ x,y };
-			float shit = noise.GetNoise((float)world_coordinate.x, (float)world_coordinate.y) * 5;
-			tiledata[y*size+x] = floor(abs(shit));
+			float shit = noise.GetNoise((float)world_coordinate.x, (float)world_coordinate.y) * 4;
+			tiledata[y*size+x] = floor(abs(shit)) + 1;
 		}
 	}
 }
