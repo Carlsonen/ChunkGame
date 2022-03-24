@@ -1,5 +1,6 @@
 #include "shit/shit.h"
 
+// file shit
 void shit::write_string(std::fstream& file, std::string& str) {
 	uint64_t lenght = str.length();
 	file.write((char*)&lenght, sizeof(uint64_t));
@@ -34,3 +35,12 @@ bool shit::file_exists_test(const std::string name) {
 	return (stat(name.c_str(), &buffer) == 0);
 }
 
+// math shit
+olc::vi2d shit::to_chunk(olc::vf2d pos, int32_t chunk_size) {
+	return (pos / chunk_size).floor();
+}
+olc::vi2d shit::vClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax) {
+	value.x = std::max(std::min(value.x, vMax.x), vMin.x);
+	value.y = std::max(std::min(value.y, vMax.y), vMin.y);
+	return value;
+}

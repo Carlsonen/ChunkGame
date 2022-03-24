@@ -141,12 +141,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\main\Drawer.cpp" />
     <ClCompile Include="src\main\main.cpp" />
     <ClCompile Include="src\shit\shit.cpp" />
     <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\camera\Camera.h" />
     <ClInclude Include="src\main\Drawer.h" />
     <ClInclude Include="src\main\olcPixelGameEngine.h" />
     <ClInclude Include="src\shit\shit.h" />

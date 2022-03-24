@@ -17,6 +17,9 @@ public:
 	void save(std::string world_name);
 	int dist_from_point_max(olc::vi2d point);
 	olc::vi2d get_id();
+	uint8_t get_tile(int x, int y) {
+		return tiledata[y * size + x];
+	}
 private:
 	void generate(olc::vi2d pos, uint64_t seed);
 	const int size = 256;

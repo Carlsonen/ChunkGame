@@ -12,6 +12,7 @@ namespace shit {
 	void createfolder(std::string path);
 	bool file_exists_test(const std::string name);
 	// math shit
-	olc::vi2d to_chunk(olc::vf2d pos, int chunk_size);
+	olc::vi2d to_chunk(olc::vf2d pos, int32_t chunk_size);
+	olc::vi2d vClamp(olc::vi2d value, olc::vi2d vMin, olc::vi2d vMax);
 }
  

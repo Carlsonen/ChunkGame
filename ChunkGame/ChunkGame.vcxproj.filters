@@ -16,6 +16,9 @@
     <Filter Include="src\shit">
       <UniqueIdentifier>{95c94067-efbc-4023-93dd-a1cb1a26dcbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\camera">
+      <UniqueIdentifier>{257f8487-de02-46bf-aa2f-99271a6207d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main\main.cpp">
@@ -29,6 +32,9 @@
     </ClCompile>
     <ClCompile Include="src\shit\shit.cpp">
       <Filter>src\shit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\Camera.cpp">
+      <Filter>src\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="src\shit\shit.h">
       <Filter>src\shit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\Camera.h">
+      <Filter>src\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
