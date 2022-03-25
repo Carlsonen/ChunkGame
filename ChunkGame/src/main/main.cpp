@@ -40,8 +40,10 @@ public:
 		olc::vi2d chunk_ul = chunk->get_id() * 256;
 		olc::vi2d chunk_br = chunk_ul + olc::vi2d{ 256,256 };
 
-		olc::vi2d start = shit::viClamp((upper_left / camera.downscaler).floor() * camera.downscaler, chunk_ul, chunk_br);
-		olc::vi2d end = shit::viClamp((bottom_right / camera.downscaler).ceil() * camera.downscaler, chunk_ul, chunk_br) ;
+		olc::vi2d start = shit::viClamp((upper_left / camera.downscaler).floor() 
+			* camera.downscaler, chunk_ul, chunk_br);
+		olc::vi2d end = shit::viClamp((bottom_right / camera.downscaler).ceil() 
+			* camera.downscaler, chunk_ul, chunk_br) ;
 		//std::cout << start << " - " << end << std::endl;
 		for (int y = start.y; y < end.y; y += camera.downscaler) {
 			for (int x = start.x; x < end.x; x += camera.downscaler) {
@@ -104,14 +106,13 @@ public:
 		if (GetKey(olc::Key::RIGHT).bHeld) {
 			camera.move_position(olc::vf2d{ 1, 0 } * fElapsedTime * speed);
 		}
-
+		olc::vi2d mouse_on_screen = GetMousePos();
+		olc::vf2d mouse_in_world = camera.screen_to_world(olc::vf2d{(float)mouse_on_screen.x/w,(float)mouse_on_screen.y / h });
 		if (GetMouseWheel() < 0) {
-			camera.zoom(1.1);
-			//downscaler = downscaler * 2;
+			camera.zoom(1.1, mouse_in_world);
 		}
 		if (GetMouseWheel() > 0) {
-			camera.zoom(1/1.1);
-			//downscaler = std::max(downscaler * 0.5, 1.0);
+			camera.zoom(1/1.1, mouse_in_world);
 		}
 		return true;
 	}
