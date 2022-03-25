@@ -3141,9 +3141,16 @@ namespace olc
 
 	void PixelGameEngine::olc_CoreUpdate()
 	{
+		const float fixed_time = 1.0 / 64;
 		// Handle Timing
 		m_tp2 = std::chrono::system_clock::now();
 		std::chrono::duration<float> elapsedTime = m_tp2 - m_tp1;
+		float performance_ratio = elapsedTime.count() / fixed_time;
+		while (elapsedTime.count() < fixed_time) { // fixed updates
+			m_tp2 = std::chrono::system_clock::now();
+			elapsedTime = m_tp2 - m_tp1;
+		}
+		
 		m_tp1 = m_tp2;
 
 		// Our time per frame coefficient
@@ -3192,7 +3199,7 @@ namespace olc
 		for (auto& ext : vExtensions) bExtensionBlockFrame |= ext->OnBeforeUserUpdate(fElapsedTime);
 		if (!bExtensionBlockFrame)
 		{
-			if (!OnUserUpdate(fElapsedTime)) bAtomActive = false;
+			if (!OnUserUpdate(fixed_time)) bAtomActive = false;
 		}
 		for (auto& ext : vExtensions) ext->OnAfterUserUpdate(fElapsedTime);
 
@@ -3244,7 +3251,8 @@ namespace olc
 		{
 			nLastFPS = nFrameCount;
 			fFrameTimer -= 1.0f;
-			std::string sTitle = "OneLoneCoder.com - Pixel Game Engine - " + sAppName + " - FPS: " + std::to_string(nFrameCount);
+			std::string sTitle = "OneLoneCoder.com - Pixel Game Engine - " + sAppName 
+				+ " - FPS: " + std::to_string(nFrameCount) + " " + std::to_string(performance_ratio);
 			platform->SetWindowTitle(sTitle);
 			nFrameCount = 0;
 		}
