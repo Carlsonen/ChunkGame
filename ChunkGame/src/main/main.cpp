@@ -3,39 +3,37 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <thread>
-#include <chrono>
 #include <queue>
 #include <complex>
 #include <math.h>
-#include <thread>
-#include <vector>
 #include <iomanip>
-#include <cstring>
 #include <cstddef>
 
 #include "world/World.h"
 #include "shit/shit.h"
+#include "shit/inputs.h"
 #include "camera/Camera.h"
+#include "player/Player.h"
 
-
-//screen setup
-const int w = 960;
-const int h = 960;
+int w = 960;
+int h = 960;
 const int pixelSize = 1;
-
-std::unique_ptr<olc::Sprite> sprTiles;
-std::unique_ptr<olc::Decal> decTiles;
 
 class MainGameObject : public olc::PixelGameEngine
 {
 public:
+	std::unique_ptr<olc::Sprite> sprTiles;
+	std::unique_ptr<olc::Decal> decTiles;
+	std::unique_ptr<olc::Sprite> sprPlayer;
+	std::unique_ptr<olc::Decal> decPlayer;
+
 	World world;
 	Camera camera;
+	Player player;
+	InputList inputs;
 	MainGameObject() { sAppName = "The name of the app"; }
 
-	void Draw_partial_chunk(olc::vf2d upper_left, olc::vf2d bottom_right, Chunk* chunk) {
+	void Draw_partial_chunk(olc::vf2d upper_left, olc::vf2d bottom_right, Chunk* chunk, olc::vf2d decal_scale) {
 		
 		olc::vi2d chunk_ul = chunk->get_id() * 256;
 		olc::vi2d chunk_br = chunk_ul + olc::vi2d{ 256,256 };
@@ -58,7 +56,7 @@ public:
 				if (tile == 1) color = olc::RED;
 				else if (tile == 2) color = olc::BLUE;
 				//DrawRect(screen_pos, olc::vi2d{10,10}, color);
-				olc::vf2d decal_scale = (olc::vf2d{ (float)w,(float)h } / camera.view_dimensions * camera.downscaler).ceil();
+				
 				DrawPartialDecal(screen_pos, decal_scale,
 					decTiles.get(), olc::vf2d{(float)tile * 16, 0}, olc::vf2d{16.0,16.0});
 			}
@@ -66,19 +64,32 @@ public:
 	}
 	void Drawer() {
 		Clear(olc::Pixel::Pixel());
+		olc::vf2d decal_scale = olc::vf2d{ (float)w,(float)h } / camera.view_dimensions;
 		for (int i = 0; i < world.loaded_chunks.size(); i++) {
-			Draw_partial_chunk(camera.UL_world(), camera.BR_world(), world.loaded_chunks[i]);
+			Draw_partial_chunk(camera.UL_world(), camera.BR_world(), world.loaded_chunks[i], (decal_scale * camera.downscaler).ceil());
 		}
+
+		olc::vf2d player_screen_pos = camera.world_to_screen(player.GetPos()) 
+			* olc::vf2d{ (float)w,(float)h };
+		DrawPartialDecal(player_screen_pos, decal_scale,
+			decPlayer.get(), olc::vf2d{16.0, 16.0 }*(player.GetFacing()+olc::vi2d{1,1}), olc::vf2d{16.0,16.0});
+	}
+	void UpdateInputs(InputList& inputs) {
+		inputs.player_walk_up = GetKey(olc::Key::W).bHeld;
+		inputs.player_walk_down = GetKey(olc::Key::S).bHeld;
+		inputs.player_walk_left = GetKey(olc::Key::A).bHeld;
+		inputs.player_walk_right = GetKey(olc::Key::D).bHeld;
+		inputs.player_is_sprinting = GetKey(olc::Key::SHIFT).bHeld;
 	}
 	
 public:
-	
-	olc::vi2d test_pos = {0,0};
 	bool OnUserCreate() override
 	{
 		// Load Sprite
 		sprTiles = std::make_unique<olc::Sprite>("./assets/tiles.png");
 		decTiles = std::make_unique<olc::Decal>(sprTiles.get());
+		sprPlayer = std::make_unique<olc::Sprite>("./assets/player.png");
+		decPlayer = std::make_unique<olc::Decal>(sprPlayer.get());
 
 		//world.create("cock", 0);
 		world.create("cock",0);
@@ -88,32 +99,26 @@ public:
 		return true;
 	}
 
-	bool OnUserUpdate(float fElapsedTime) override
+	bool OnUserUpdate(const float fElapsedTime) override
 	{
-		Drawer();
-		world.update_chunks(camera.position);
+		UpdateInputs(inputs);
+		player.Tick(inputs, fElapsedTime);
+		
+		world.update_chunks(player.GetPos());
 
-		float speed = 50;
-		if (GetKey(olc::Key::UP).bHeld) {
-			camera.move_position(olc::vf2d{ 0, -1 } * fElapsedTime * speed);
-		}
-		if (GetKey(olc::Key::DOWN).bHeld) {
-			camera.move_position(olc::vf2d{ 0, 1 } * fElapsedTime * speed);
-		}
-		if (GetKey(olc::Key::LEFT).bHeld) {
-			camera.move_position(olc::vf2d{ -1, 0 } * fElapsedTime * speed);
-		}
-		if (GetKey(olc::Key::RIGHT).bHeld) {
-			camera.move_position(olc::vf2d{ 1, 0 } * fElapsedTime * speed);
-		}
+		
 		olc::vi2d mouse_on_screen = GetMousePos();
-		olc::vf2d mouse_in_world = camera.screen_to_world(olc::vf2d{(float)mouse_on_screen.x/w,(float)mouse_on_screen.y / h });
+		olc::vf2d mouse_on_screen_scale = olc::vf2d{ (float)mouse_on_screen.x / w,(float)mouse_on_screen.y / h };
+		olc::vf2d mouse_in_world = camera.screen_to_world(mouse_on_screen_scale);
 		if (GetMouseWheel() < 0) {
 			camera.zoom(1.1, mouse_in_world);
 		}
 		if (GetMouseWheel() > 0) {
 			camera.zoom(1/1.1, mouse_in_world);
 		}
+
+		camera.set_position(player.GetPos() + olc::vf2d(0.5,0.5)); // +0.5 to center on player center
+		Drawer();
 		return true;
 	}
 };

@@ -22,8 +22,8 @@ void Camera::zoom(float z, olc::vf2d mouse_world) {
 		olc::vf2d{1024.0,1024.0});
 	position += (position - mouse_world) * (z-1.0);
 	float x = view_dimensions.x;
-	if (x < 128) downscaler = 1;
-	else if (x < 512) downscaler = 2;
+	if (x < 64) downscaler = 1;
+	else if (x < 256) downscaler = 2;
 	else if (x < 1024) downscaler = 4;
 	else downscaler = 8;
 	std::cout << "downscaler: " << downscaler << std::endl;

@@ -144,6 +144,8 @@
     <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\main\Drawer.cpp" />
     <ClCompile Include="src\main\main.cpp" />
+    <ClCompile Include="src\player\Player.cpp" />
+    <ClCompile Include="src\shit\inputs.cpp" />
     <ClCompile Include="src\shit\shit.cpp" />
     <ClCompile Include="src\world\World.cpp" />
   </ItemGroup>
@@ -151,6 +153,8 @@
     <ClInclude Include="src\camera\Camera.h" />
     <ClInclude Include="src\main\Drawer.h" />
     <ClInclude Include="src\main\olcPixelGameEngine.h" />
+    <ClInclude Include="src\player\Player.h" />
+    <ClInclude Include="src\shit\inputs.h" />
     <ClInclude Include="src\shit\shit.h" />
     <ClInclude Include="src\world\FastNoiseLite.h" />
     <ClInclude Include="src\world\World.h" />
